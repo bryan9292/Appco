@@ -2,88 +2,249 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Materials</title>
+<title>Pipe</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background: #0b0b0b;
+  background: transparent;
   font-family: system-ui, sans-serif;
   color: #f2f2f2;
 }
 
-/* TOP BAR */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 12px 20px;
-  background: #111;
-  border-bottom: 1px solid #2a2a2a;
-  display: flex;
-  justify-content: flex-end;
-  box-sizing: border-box;
-  z-index: 10;
+/* PIPE HEADER */
+.pipe {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(3rem, 20vw, 10rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
 }
 
-.checkout {
-  padding: 10px 18px;
+/* SIZES */
+.sizes {
+  margin-top: 24px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.item {
+  width: 200px;
+  padding: 14px 0;
+  font-size: 1.5rem;
+  background: #161616;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* MODAL OVERLAY */
+.pipe-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.pipe-modal {
+  position: relative;
+  width: 360px;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.pipe-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 26px;
+  border-radius: 6px;
   background: #1e1e1e;
   border: 1px solid #3a3a3a;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pipe-label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 12px 0 6px;
+}
+
+/* OPTIONS */
+.pipe-options {
+  display: flex;
+  gap: 8px;
+}
+
+.pipe-options button {
+  flex: 1;
+  height: 44px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
   color: #f2f2f2;
   cursor: pointer;
 }
 
-/* MAIN */
-.container {
-  padding-top: 70px;   /* single offset */
-  height: 100%;
-  box-sizing: border-box;
+.pipe-options button.active {
+  background: #2a2a2a;
+  border-color: #555;
 }
 
-/* IFRAME */
-iframe {
+.pipe-input {
   width: 100%;
-  height: calc(100vh - 70px); /* visible area below topbar */
-  border: none;
-  display: block;
+  margin-top: 8px;
+  padding: 10px;
+  font-size: 1.3rem;
+  background: #0b0b0b;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #f2f2f2;
+  text-align: center;
+}
+
+.pipe-action {
+  width: 100%;
+  height: 44px;
+  margin-top: 16px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  <button class="checkout" onclick="openCart()">Checkout</button>
+<div>
+  <div class="pipe" onclick="pipeToggle()">PIPE</div>
+
+  <div class="sizes" id="pipeSizes">
+    <div class="item" onclick="pipeOpen('3/8')">3/8</div>
+    <div class="item" onclick="pipeOpen('1/2')">1/2</div>
+    <div class="item" onclick="pipeOpen('3/4')">3/4</div>
+    <div class="item" onclick="pipeOpen('1')">1</div>
+    <div class="item" onclick="pipeOpen('1-1/4')">1-1/4</div>
+    <div class="item" onclick="pipeOpen('1-1/2')">1-1/2</div>
+    <div class="item" onclick="pipeOpen('2')">2</div>
+    <div class="item" onclick="pipeOpen('2-1/2')">2-1/2</div>
+  </div>
 </div>
 
-<div class="container">
-  <iframe src="pipe.html"></iframe>
+<!-- PIPE MODAL -->
+<div class="pipe-overlay" id="pipeOverlay" onclick="pipeClose()">
+  <div class="pipe-modal" onclick="event.stopPropagation()">
+    <div class="pipe-close" onclick="pipeClose()">✕</div>
+
+    <h3 id="pipeTitle"></h3>
+
+    <div class="pipe-label">Material</div>
+    <div class="pipe-options">
+      <button onclick="pipeMaterial(this,'Black')">Black</button>
+      <button onclick="pipeMaterial(this,'Galv')">Galv</button>
+      <button onclick="pipeMaterial(this,'Brass')">Brass</button>
+    </div>
+
+    <div class="pipe-label">Schedule</div>
+    <div class="pipe-options">
+      <button id="pipeSch40" onclick="pipeSchedule(this,'Sch. 40')">Sch. 40</button>
+      <button id="pipeSchAlt" onclick="pipeSchedule(this,'Sch. 10')">Sch. 10</button>
+    </div>
+
+    <div class="pipe-label">Ends</div>
+    <div class="pipe-options">
+      <button onclick="pipeEnds(this,'T x T')">T × T</button>
+      <button onclick="pipeEnds(this,'T x G')">T × G</button>
+    </div>
+    <div class="pipe-options">
+      <button onclick="pipeEnds(this,'G x G')">G × G</button>
+      <button onclick="pipeEnds(this,'Plain')">Plain</button>
+    </div>
+
+    <div class="pipe-label">How many?</div>
+    <input type="number" min="1" id="pipeQty" class="pipe-input" />
+
+    <button class="pipe-action" onclick="pipeSubmit()">Done</button>
+  </div>
 </div>
 
 <script>
-/* GLOBAL CART */
-window.cart = [];
+let pipeCurrent = {};
 
-window.addToCart = function(item) {
-  window.cart.push(item);
-  document.querySelector(".checkout").innerText =
-    `Checkout (${window.cart.length})`;
-};
+function pipeToggle() {
+  const s = document.getElementById('pipeSizes');
+  s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
+}
 
-function openCart() {
-  alert(
-    window.cart.length
-      ? window.cart.map(
-          (c,i)=>`${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}`
-        ).join("\n")
-      : "Cart is empty"
-  );
+function pipeOpen(size) {
+  pipeCurrent = { size, material:'', schedule:'', ends:'', qty:0 };
+  document.getElementById('pipeTitle').innerText = `Pipe ${size}`;
+  document.getElementById('pipeQty').value = '';
+  document.querySelectorAll('.pipe-options button').forEach(b => b.classList.remove('active'));
+  document.getElementById('pipeSchAlt').innerText = 'Sch. 10';
+  document.getElementById('pipeOverlay').style.display = 'flex';
+}
+
+function pipeClose() {
+  document.getElementById('pipeOverlay').style.display = 'none';
+}
+
+function pipeMaterial(btn,val) {
+  pipeCurrent.material = val;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const alt = document.getElementById('pipeSchAlt');
+  alt.classList.remove('active');
+  alt.innerText = val === 'Brass' ? 'Thin' : 'Sch. 10';
+  pipeCurrent.schedule = '';
+}
+
+function pipeSchedule(btn,val) {
+  if (btn.classList.contains('active')) {
+    btn.classList.remove('active');
+    pipeCurrent.schedule = '';
+    return;
+  }
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  pipeCurrent.schedule = val;
+}
+
+function pipeEnds(btn,val) {
+  document.querySelectorAll('#pipeOverlay .pipe-options button')
+    .forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  pipeCurrent.ends = val;
+}
+
+function pipeSubmit() {
+  pipeCurrent.qty = Number(document.getElementById('pipeQty').value);
+  if (!pipeCurrent.material || !pipeCurrent.schedule || !pipeCurrent.ends || !pipeCurrent.qty) return;
+
+  if (window.parent && window.parent.addToCart) {
+    window.parent.addToCart({ ...pipeCurrent });
+  }
+
+  pipeClose();
 }
 </script>
 
