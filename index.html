@@ -91,23 +91,32 @@
       border: 1px solid #2a2a2a;
       border-radius: 10px;
       padding: 24px;
-      width: 280px;
+      width: 320px;
       text-align: center;
     }
 
     .modal h2 {
-      margin: 0 0 12px;
+      margin: 0 0 16px;
       font-size: 1.6rem;
     }
 
-    .materials {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
+    .section {
       margin-bottom: 16px;
+      text-align: left;
     }
 
-    .materials button {
+    .label {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 6px;
+    }
+
+    .options {
+      display: flex;
+      gap: 8px;
+    }
+
+    .options button {
       flex: 1;
       font-size: 1rem;
       padding: 10px 0;
@@ -118,14 +127,16 @@
       cursor: pointer;
     }
 
-    .materials button.active {
+    .options button.active {
       background: #2a2a2a;
       border-color: #555;
     }
 
-    .modal p {
-      margin: 0 0 8px;
-      opacity: 0.85;
+    /* NESTED SCHEDULE */
+    .schedule {
+      margin-top: 10px;
+      margin-left: 14px;
+      display: none;
     }
 
     .modal input {
@@ -140,7 +151,7 @@
     }
 
     .close {
-      margin-top: 16px;
+      margin-top: 18px;
       font-size: 1rem;
       padding: 8px 14px;
       border-radius: 6px;
@@ -148,6 +159,7 @@
       border: 1px solid #3a3a3a;
       color: #f2f2f2;
       cursor: pointer;
+      width: 100%;
     }
   </style>
 </head>
@@ -179,14 +191,30 @@
     <div class="modal">
       <h2 id="selectedSize"></h2>
 
-      <div class="materials">
-        <button onclick="selectMaterial(this, 'Black')">Black</button>
-        <button onclick="selectMaterial(this, 'Galv')">Galv</button>
-        <button onclick="selectMaterial(this, 'Brass')">Brass</button>
+      <!-- MATERIAL -->
+      <div class="section">
+        <div class="label">Material</div>
+        <div class="options">
+          <button onclick="selectMaterial(this, 'Black')">Black</button>
+          <button onclick="selectMaterial(this, 'Galv')">Galv</button>
+          <button onclick="selectMaterial(this, 'Brass')">Brass</button>
+        </div>
+
+        <!-- SCHEDULE (NESTED) -->
+        <div class="schedule" id="scheduleSection">
+          <div class="label">Schedule</div>
+          <div class="options">
+            <button onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
+            <button onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
+          </div>
+        </div>
       </div>
 
-      <p>How many?</p>
-      <input type="number" min="1" id="qtyInput" />
+      <!-- QTY -->
+      <div class="section">
+        <div class="label">How many?</div>
+        <input type="number" min="1" id="qtyInput" />
+      </div>
 
       <button class="close" onclick="submitItem()">Done</button>
     </div>
@@ -195,7 +223,7 @@
   <script>
     let cartCount = 0;
     let selectedMaterial = '';
-    let selectedSize = '';
+    let selectedSchedule = '';
 
     function toggleSizes() {
       const sizes = document.getElementById('sizes');
@@ -203,25 +231,33 @@
     }
 
     function openModal(size) {
-      selectedSize = size;
       selectedMaterial = '';
+      selectedSchedule = '';
       document.getElementById('selectedSize').innerText = `Pipe ${size}`;
       document.getElementById('qtyInput').value = '';
-      document.querySelectorAll('.materials button').forEach(b => b.classList.remove('active'));
+      document.getElementById('scheduleSection').style.display = 'none';
+      document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       document.getElementById('overlay').style.display = 'flex';
     }
 
     function selectMaterial(button, material) {
       selectedMaterial = material;
-      document.querySelectorAll('.materials button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      document.getElementById('scheduleSection').style.display = 'block';
+    }
+
+    function selectSchedule(button, schedule) {
+      selectedSchedule = schedule;
+      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
     function submitItem() {
       const qty = document.getElementById('qtyInput').value;
-      if (!selectedMaterial || !qty || qty <= 0) return;
+      if (!selectedMaterial || !selectedSchedule || !qty) return;
 
-      cartCount += 1;
+      cartCount++;
       document.getElementById('checkoutBtn').innerText = `Checkout (${cartCount})`;
       document.getElementById('overlay').style.display = 'none';
     }
