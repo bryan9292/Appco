@@ -1,18 +1,33 @@
-<!-- PIPE MODULE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Pipe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-/* PIPE MODULE STYLES (scoped by structure) */
+/* ✅ REQUIRED FOR iOS SAFARI IN IFRAME */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0b0b0b;
+  color: #ffffff;
+  font-family: system-ui, sans-serif;
+}
 
+/* PIPE HEADER */
 .pipe {
+  font-family: Arial, Helvetica, sans-serif;
   font-size: clamp(3rem, 20vw, 10rem);
   font-weight: 800;
   letter-spacing: 0.08em;
+  color: #ffffff;
   cursor: pointer;
   text-align: center;
-  color: #ffffff;        /* ✅ FIX: force white text */
-  user-select: none;     /* prevents highlight artifact */
+  user-select: none;
 }
 
+/* SIZES */
 .sizes {
   margin-top: 24px;
   display: none;
@@ -32,7 +47,7 @@
   text-align: center;
 }
 
-/* MODAL */
+/* MODAL OVERLAY */
 .pipe-overlay {
   position: fixed;
   inset: 0;
@@ -64,6 +79,7 @@
   background: #1e1e1e;
   border: 1px solid #3a3a3a;
   cursor: pointer;
+  user-select: none;
 }
 
 .pipe-label {
@@ -72,6 +88,7 @@
   margin: 12px 0 6px;
 }
 
+/* OPTIONS */
 .pipe-options {
   display: flex;
   gap: 8px;
@@ -114,6 +131,9 @@
   cursor: pointer;
 }
 </style>
+</head>
+
+<body>
 
 <div>
   <div class="pipe" onclick="pipeToggle()">PIPE</div>
@@ -223,10 +243,13 @@ function pipeSubmit() {
   pipeCurrent.qty = Number(document.getElementById('pipeQty').value);
   if (!pipeCurrent.material || !pipeCurrent.schedule || !pipeCurrent.ends || !pipeCurrent.qty) return;
 
-  if (window.addToCart) {
-    window.addToCart({ ...pipeCurrent });
+  if (window.parent && window.parent.addToCart) {
+    window.parent.addToCart({ ...pipeCurrent });
   }
 
   pipeClose();
 }
 </script>
+
+</body>
+</html>
