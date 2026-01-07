@@ -1,327 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pipe</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Pipe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #0b0b0b;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f2f2f2;
-    }
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #0b0b0b;
+  font-family: system-ui, sans-serif;
+  color: #f2f2f2;
+}
 
-    /* TOP BAR */
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 12px 20px;
-      background: #111;
-      border-bottom: 1px solid #2a2a2a;
-      display: flex;
-      justify-content: flex-end;
-      z-index: 10;
-      box-sizing: border-box;
-    }
+/* TOP BAR */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 20px;
+  background: #111;
+  border-bottom: 1px solid #2a2a2a;
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  z-index: 10;
+}
 
-    .checkout {
-      font-size: 1.1rem;
-      padding: 10px 18px;
-      border-radius: 8px;
-      background: #1e1e1e;
-      border: 1px solid #3a3a3a;
-      color: #f2f2f2;
-      cursor: pointer;
-      margin-right: 8px;
-    }
+.checkout {
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  color: #f2f2f2;
+  cursor: pointer;
+}
 
-    /* MAIN */
-    .container {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-top: 70px;
-      text-align: center;
-      user-select: none;
-    }
+/* MAIN */
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 70px;
+}
 
-    .pipe {
-      font-size: clamp(3rem, 20vw, 10rem);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-    }
+.pipe {
+  font-size: clamp(3rem, 20vw, 10rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
 
-    .sizes {
-      margin-top: 24px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
+.sizes {
+  margin-top: 24px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
 
-    .item {
-      width: 200px;
-      font-size: 1.5rem;
-      padding: 14px 0;
-      border-radius: 8px;
-      background: #161616;
-      border: 1px solid #2a2a2a;
-      cursor: pointer;
-    }
+.item {
+  width: 200px;
+  padding: 14px 0;
+  font-size: 1.5rem;
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    /* OVERLAY */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-    }
+/* OVERLAY + MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
 
-    .modal {
-      position: relative;
-      background: #121212;
-      border: 1px solid #2a2a2a;
-      border-radius: 10px;
-      padding: 24px;
-      width: 360px;
-      text-align: left;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
+.modal {
+  position: relative;
+  width: 360px;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 24px;
+}
 
-    .close-x {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      background: #1e1e1e;
-      border: 1px solid #3a3a3a;
-      color: #f2f2f2;
-      font-size: 1.1rem;
-      line-height: 26px;
-      text-align: center;
-      cursor: pointer;
-    }
+.close-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 26px;
+  border-radius: 6px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  cursor: pointer;
+}
 
-    .modal h2 {
-      margin: 0 0 14px;
-      font-size: 1.4rem;
-      text-align: center;
-    }
+.label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 12px 0 6px;
+}
 
-    .label {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-bottom: 6px;
-    }
+.options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
-    .options {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
+.options button {
+  flex: 1 1 45%;
+  padding: 10px 0;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #f2f2f2;
+  cursor: pointer;
+}
 
-    .options button {
-      flex: 1 1 45%;
-      font-size: 1rem;
-      padding: 10px 0;
-      border-radius: 6px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      color: #f2f2f2;
-      cursor: pointer;
-    }
+.options button.active {
+  background: #2a2a2a;
+  border-color: #555;
+}
 
-    .options button.active {
-      background: #2a2a2a;
-      border-color: #555;
-    }
+input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  font-size: 1.3rem;
+  background: #0b0b0b;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #f2f2f2;
+  text-align: center;
+}
 
-    input {
-      width: 100%;
-      font-size: 1.4rem;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #3a3a3a;
-      background: #0b0b0b;
-      color: #f2f2f2;
-      text-align: center;
-      margin-bottom: 16px;
-    }
+.action {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    .action {
-      width: 100%;
-      font-size: 1rem;
-      padding: 10px;
-      border-radius: 6px;
-      background: #1e1e1e;
-      border: 1px solid #3a3a3a;
-      color: #f2f2f2;
-      cursor: pointer;
-    }
-
-    .cart-item {
-      border-bottom: 1px solid #2a2a2a;
-      padding: 10px 0;
-      font-size: 0.95rem;
-    }
-  </style>
+/* CART */
+.cart-item {
+  border-bottom: 1px solid #2a2a2a;
+  padding: 10px 0;
+  font-size: 0.95rem;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="topbar">
-    <button class="checkout" id="checkoutBtn" onclick="openCart()">Checkout</button>
-  </div>
+<div class="topbar">
+  <button class="checkout" id="checkoutBtn" onclick="openCart()">Checkout</button>
+</div>
 
-  <div class="container">
-    <div>
-      <div class="pipe" onclick="toggleSizes()">PIPE</div>
-
-      <div class="sizes" id="sizes">
-        <div class="item" onclick="openItemModal('3/8')">3/8</div>
-        <div class="item" onclick="openItemModal('1/2')">1/2</div>
-        <div class="item" onclick="openItemModal('3/4')">3/4</div>
-        <div class="item" onclick="openItemModal('1')">1</div>
-        <div class="item" onclick="openItemModal('1-1/4')">1-1/4</div>
-        <div class="item" onclick="openItemModal('1-1/2')">1-1/2</div>
-        <div class="item" onclick="openItemModal('2')">2</div>
-        <div class="item" onclick="openItemModal('2-1/2')">2-1/2</div>
-      </div>
+<div class="container">
+  <div>
+    <div class="pipe" onclick="toggleSizes()">PIPE</div>
+    <div class="sizes" id="sizes">
+      <div class="item" onclick="openItemModal('3/8')">3/8</div>
+      <div class="item" onclick="openItemModal('1/2')">1/2</div>
+      <div class="item" onclick="openItemModal('3/4')">3/4</div>
+      <div class="item" onclick="openItemModal('1')">1</div>
+      <div class="item" onclick="openItemModal('1-1/4')">1-1/4</div>
+      <div class="item" onclick="openItemModal('1-1/2')">1-1/2</div>
+      <div class="item" onclick="openItemModal('2')">2</div>
+      <div class="item" onclick="openItemModal('2-1/2')">2-1/2</div>
     </div>
   </div>
+</div>
 
-  <!-- ITEM MODAL -->
-  <div class="overlay" id="itemOverlay" onclick="closeItemModal()">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="close-x" onclick="closeItemModal()">✕</div>
+<!-- ITEM MODAL -->
+<div class="overlay" id="itemOverlay" onclick="closeItemModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="close-x" onclick="closeItemModal()">✕</div>
+    <h3 id="itemTitle"></h3>
 
-      <h2 id="itemTitle"></h2>
-
-      <div class="label">Material</div>
-      <div class="options" id="materialOpts"></div>
-
-      <div class="label">Schedule</div>
-      <div class="options" id="scheduleOpts"></div>
-
-      <div class="label">Ends</div>
-      <div class="options" id="endsOpts">
-        <button onclick="toggleSelect(this,'T x T','ends')">T × T</button>
-        <button onclick="toggleSelect(this,'T x G','ends')">T × G</button>
-        <button onclick="toggleSelect(this,'G x G','ends')">G × G</button>
-        <button onclick="toggleSelect(this,'Plain','ends')">Plain</button>
-      </div>
-
-      <div class="label">How many?</div>
-      <input type="number" min="1" id="qtyInput" />
-
-      <button class="action" onclick="addToCart()">Done</button>
+    <div class="label">Material</div>
+    <div class="options" id="materialBtns">
+      <button onclick="selectMaterial(this,'Black')">Black</button>
+      <button onclick="selectMaterial(this,'Galv')">Galv</button>
+      <button onclick="selectMaterial(this,'Brass')">Brass</button>
     </div>
-  </div>
 
-  <!-- CART MODAL -->
-  <div class="overlay" id="cartOverlay" onclick="closeCart()">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="close-x" onclick="closeCart()">✕</div>
-      <h2>Checkout</h2>
-      <div id="cartList"></div>
+    <div class="label">Schedule</div>
+    <div class="options">
+      <button id="sch40" onclick="selectSchedule(this,'Sch. 40')">Sch. 40</button>
+      <button id="schAlt" onclick="selectSchedule(this,'Sch. 10')">Sch. 10</button>
     </div>
+
+    <div class="label">Ends</div>
+    <div class="options">
+      <button onclick="selectEnds(this,'T x T')">T × T</button>
+      <button onclick="selectEnds(this,'T x G')">T × G</button>
+      <button onclick="selectEnds(this,'G x G')">G × G</button>
+      <button onclick="selectEnds(this,'Plain')">Plain</button>
+    </div>
+
+    <div class="label">How many?</div>
+    <input type="number" min="1" id="qtyInput" />
+
+    <button class="action" onclick="addToCart()">Done</button>
   </div>
+</div>
 
-  <script>
-    let cart = [];
-    let current = {};
+<!-- CART MODAL -->
+<div class="overlay" id="cartOverlay" onclick="closeCart()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="close-x" onclick="closeCart()">✕</div>
+    <h3>Checkout</h3>
+    <div id="cartList"></div>
+  </div>
+</div>
 
-    function toggleSizes() {
-      const el = document.getElementById('sizes');
-      el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
-    }
+<script>
+let cart = [];
+let current = {};
 
-    function resetCurrent() {
-      current = { size:'', material:'', schedule:'', ends:'', qty:0 };
-      document.getElementById('qtyInput').value = '';
-    }
+function toggleSizes() {
+  const s = document.getElementById('sizes');
+  s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
+}
 
-    function openItemModal(size) {
-      resetCurrent();
-      current.size = size;
-      document.getElementById('itemTitle').innerText = `Pipe ${size}`;
+function openItemModal(size) {
+  current = { size, material:'', schedule:'', ends:'', qty:0 };
+  document.getElementById('itemTitle').innerText = `Pipe ${size}`;
+  document.getElementById('qtyInput').value = '';
+  document.querySelectorAll('.options button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('schAlt').innerText = 'Sch. 10';
+  document.getElementById('itemOverlay').style.display = 'flex';
+}
 
-      const mat = document.getElementById('materialOpts');
-      mat.innerHTML = `
-        <button onclick="selectMaterial(this,'Black')">Black</button>
-        <button onclick="selectMaterial(this,'Galv')">Galv</button>
-        <button onclick="selectMaterial(this,'Brass')">Brass</button>
-      `;
+function closeItemModal() {
+  document.getElementById('itemOverlay').style.display = 'none';
+}
 
-      document.getElementById('scheduleOpts').innerHTML = '';
-      document.getElementById('itemOverlay').style.display = 'flex';
-    }
+function selectMaterial(btn,val){
+  current.material = val;
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const alt = document.getElementById('schAlt');
+  alt.classList.remove('active');
+  alt.innerText = val==='Brass' ? 'Thin' : 'Sch. 10';
+  current.schedule = '';
+}
 
-    function closeItemModal() {
-      resetCurrent();
-      document.getElementById('itemOverlay').style.display = 'none';
-    }
+function selectSchedule(btn,val){
+  if(btn.classList.contains('active')){
+    btn.classList.remove('active');
+    current.schedule='';
+    return;
+  }
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  current.schedule = val;
+}
 
-    function selectMaterial(btn, val) {
-      current.material = val;
-      btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
+function selectEnds(btn,val){
+  if(btn.classList.contains('active')){
+    btn.classList.remove('active');
+    current.ends='';
+    return;
+  }
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  current.ends = val;
+}
 
-      const sch = document.getElementById('scheduleOpts');
-      sch.innerHTML = `
-        <button onclick="toggleSelect(this,'Sch. 40','schedule')">Sch. 40</button>
-        <button onclick="toggleSelect(this,'${val==='Brass'?'Thin':'Sch. 10'}','schedule')">
-          ${val==='Brass'?'Thin':'Sch. 10'}
-        </button>
-      `;
-    }
+function addToCart(){
+  current.qty = Number(document.getElementById('qtyInput').value);
+  if(!current.material || !current.schedule || !current.ends || !current.qty) return;
+  cart.push({...current});
+  document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
+  closeItemModal();
+}
 
-    function toggleSelect(btn,val,key){
-      if(btn.classList.contains('active')){
-        btn.classList.remove('active');
-        current[key]='';
-      } else {
-        btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        current[key]=val;
-      }
-    }
+function openCart(){
+  const list = document.getElementById('cartList');
+  list.innerHTML = cart.length
+    ? cart.map((c,i)=>`<div class="cart-item">${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}</div>`).join('')
+    : '<div class="cart-item">Cart is empty</div>';
+  document.getElementById('cartOverlay').style.display='flex';
+}
 
-    function addToCart() {
-      current.qty = Number(document.getElementById('qtyInput').value);
-      if(!current.material || !current.schedule || !current.ends || !current.qty) return;
-
-      cart.push({...current});
-      document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
-      closeItemModal();
-    }
-
-    function openCart() {
-      const list = document.getElementById('cartList');
-      list.innerHTML = cart.length
-        ? cart.map((c,i)=>`<div class="cart-item">${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}</div>`).join('')
-        : '<div class="cart-item">Cart is empty</div>';
-      document.getElementById('cartOverlay').style.display='flex';
-    }
-
-    function closeCart(){
-      document.getElementById('cartOverlay').style.display='none';
-    }
-  </script>
+function closeCart(){
+  document.getElementById('cartOverlay').style.display='none';
+}
+</script>
 
 </body>
 </html>
