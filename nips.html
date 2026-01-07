@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Nips</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+/* REQUIRED FOR SAFARI + IFRAME */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0b0b0b;
+  color: #ffffff;
+  font-family: system-ui, sans-serif;
+}
+
+/* HEADER */
+.nips {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(3rem, 20vw, 10rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+}
+
+/* PLACEHOLDER LIST (for later) */
+.nips-list {
+  margin-top: 24px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* MODAL OVERLAY */
+.nips-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+/* MODAL */
+.nips-modal {
+  position: relative;
+  width: 360px;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+/* CLOSE */
+.nips-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 26px;
+  border-radius: 6px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* LABEL */
+.nips-label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 12px 0 6px;
+}
+
+/* PLACEHOLDER CONTENT */
+.nips-placeholder {
+  font-size: 0.9rem;
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+  <div class="nips" onclick="nipsToggle()">NIPS</div>
+
+  <!-- reserved space if we ever want inline options -->
+  <div class="nips-list" id="nipsList"></div>
+</div>
+
+<!-- NIPS MODAL -->
+<div class="nips-overlay" id="nipsOverlay" onclick="nipsClose()">
+  <div class="nips-modal" onclick="event.stopPropagation()">
+    <div class="nips-close" onclick="nipsClose()">✕</div>
+
+    <h3>Nips</h3>
+
+    <div class="nips-placeholder">
+      Options will be added here.
+    </div>
+  </div>
+</div>
+
+<script>
+/* NIPS MODULE LOGIC */
+
+function nipsToggle() {
+  // for now, directly open modal
+  nipsOpen();
+}
+
+function nipsOpen() {
+  document.getElementById('nipsOverlay').style.display = 'flex';
+}
+
+function nipsClose() {
+  document.getElementById('nipsOverlay').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
