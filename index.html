@@ -113,14 +113,22 @@ html, body {
   margin: 12px 0 6px;
 }
 
+/* OPTIONS */
 .options {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+}
+
+/* FORCE MATERIAL ROW */
+.options.material {
+  flex-wrap: nowrap;
+}
+
+.options.material button {
+  flex: 1;
 }
 
 .options button {
-  flex: 1 1 45%;
   padding: 10px 0;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
@@ -194,7 +202,7 @@ input {
     <h3 id="itemTitle"></h3>
 
     <div class="label">Material</div>
-    <div class="options" id="materialBtns">
+    <div class="options material">
       <button onclick="selectMaterial(this,'Black')">Black</button>
       <button onclick="selectMaterial(this,'Galv')">Galv</button>
       <button onclick="selectMaterial(this,'Brass')">Brass</button>
