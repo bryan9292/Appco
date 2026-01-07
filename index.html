@@ -96,7 +96,7 @@
       padding: 24px;
       width: 360px;
       text-align: left;
-      max-height: 80vh;
+      max-height: 85vh;
       overflow-y: auto;
     }
 
@@ -117,19 +117,67 @@
     }
 
     .modal h2 {
-      margin: 0 0 16px;
+      margin: 0 0 14px;
       font-size: 1.4rem;
       text-align: center;
+    }
+
+    .label {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 6px;
+    }
+
+    .options {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .options button {
+      flex: 1 1 45%;
+      font-size: 1rem;
+      padding: 10px 0;
+      border-radius: 6px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      color: #f2f2f2;
+      cursor: pointer;
+    }
+
+    .options button.active {
+      background: #2a2a2a;
+      border-color: #555;
+    }
+
+    input {
+      width: 100%;
+      font-size: 1.4rem;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #3a3a3a;
+      background: #0b0b0b;
+      color: #f2f2f2;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .action {
+      width: 100%;
+      font-size: 1rem;
+      padding: 10px;
+      border-radius: 6px;
+      background: #1e1e1e;
+      border: 1px solid #3a3a3a;
+      color: #f2f2f2;
+      cursor: pointer;
     }
 
     .cart-item {
       border-bottom: 1px solid #2a2a2a;
       padding: 10px 0;
       font-size: 0.95rem;
-    }
-
-    .cart-item:last-child {
-      border-bottom: none;
     }
   </style>
 </head>
@@ -156,7 +204,35 @@
     </div>
   </div>
 
-  <!-- CART OVERLAY -->
+  <!-- ITEM MODAL -->
+  <div class="overlay" id="itemOverlay" onclick="closeItemModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="close-x" onclick="closeItemModal()">✕</div>
+
+      <h2 id="itemTitle"></h2>
+
+      <div class="label">Material</div>
+      <div class="options" id="materialOpts"></div>
+
+      <div class="label">Schedule</div>
+      <div class="options" id="scheduleOpts"></div>
+
+      <div class="label">Ends</div>
+      <div class="options" id="endsOpts">
+        <button onclick="toggleSelect(this,'T x T','ends')">T × T</button>
+        <button onclick="toggleSelect(this,'T x G','ends')">T × G</button>
+        <button onclick="toggleSelect(this,'G x G','ends')">G × G</button>
+        <button onclick="toggleSelect(this,'Plain','ends')">Plain</button>
+      </div>
+
+      <div class="label">How many?</div>
+      <input type="number" min="1" id="qtyInput" />
+
+      <button class="action" onclick="addToCart()">Done</button>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
   <div class="overlay" id="cartOverlay" onclick="closeCart()">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="close-x" onclick="closeCart()">✕</div>
@@ -167,46 +243,83 @@
 
   <script>
     let cart = [];
+    let current = {};
 
     function toggleSizes() {
-      const sizes = document.getElementById('sizes');
-      sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
+      const el = document.getElementById('sizes');
+      el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    /* TEMP ADD FOR DEMO PURPOSE */
-    function openItemModal(size) {
-      cart.push({
-        size,
-        material: 'Selected',
-        schedule: 'Selected',
-        ends: 'Selected',
-        qty: 1
-      });
+    function resetCurrent() {
+      current = { size:'', material:'', schedule:'', ends:'', qty:0 };
+      document.getElementById('qtyInput').value = '';
+    }
 
+    function openItemModal(size) {
+      resetCurrent();
+      current.size = size;
+      document.getElementById('itemTitle').innerText = `Pipe ${size}`;
+
+      const mat = document.getElementById('materialOpts');
+      mat.innerHTML = `
+        <button onclick="selectMaterial(this,'Black')">Black</button>
+        <button onclick="selectMaterial(this,'Galv')">Galv</button>
+        <button onclick="selectMaterial(this,'Brass')">Brass</button>
+      `;
+
+      document.getElementById('scheduleOpts').innerHTML = '';
+      document.getElementById('itemOverlay').style.display = 'flex';
+    }
+
+    function closeItemModal() {
+      resetCurrent();
+      document.getElementById('itemOverlay').style.display = 'none';
+    }
+
+    function selectMaterial(btn, val) {
+      current.material = val;
+      btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const sch = document.getElementById('scheduleOpts');
+      sch.innerHTML = `
+        <button onclick="toggleSelect(this,'Sch. 40','schedule')">Sch. 40</button>
+        <button onclick="toggleSelect(this,'${val==='Brass'?'Thin':'Sch. 10'}','schedule')">
+          ${val==='Brass'?'Thin':'Sch. 10'}
+        </button>
+      `;
+    }
+
+    function toggleSelect(btn,val,key){
+      if(btn.classList.contains('active')){
+        btn.classList.remove('active');
+        current[key]='';
+      } else {
+        btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        current[key]=val;
+      }
+    }
+
+    function addToCart() {
+      current.qty = Number(document.getElementById('qtyInput').value);
+      if(!current.material || !current.schedule || !current.ends || !current.qty) return;
+
+      cart.push({...current});
       document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
+      closeItemModal();
     }
 
     function openCart() {
       const list = document.getElementById('cartList');
-      list.innerHTML = '';
-
-      if (cart.length === 0) {
-        list.innerHTML = '<div class="cart-item">Cart is empty</div>';
-      } else {
-        cart.forEach((item, i) => {
-          const div = document.createElement('div');
-          div.className = 'cart-item';
-          div.innerText =
-            `${i + 1}. ${item.size} | ${item.material} | ${item.schedule} | ${item.ends} | Qty: ${item.qty}`;
-          list.appendChild(div);
-        });
-      }
-
-      document.getElementById('cartOverlay').style.display = 'flex';
+      list.innerHTML = cart.length
+        ? cart.map((c,i)=>`<div class="cart-item">${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}</div>`).join('')
+        : '<div class="cart-item">Cart is empty</div>';
+      document.getElementById('cartOverlay').style.display='flex';
     }
 
-    function closeCart() {
-      document.getElementById('cartOverlay').style.display = 'none';
+    function closeCart(){
+      document.getElementById('cartOverlay').style.display='none';
     }
   </script>
 
