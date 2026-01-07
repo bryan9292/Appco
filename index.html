@@ -13,7 +13,7 @@ html, body {
   background: #0b0b0b;
   font-family: system-ui, sans-serif;
   color: #f2f2f2;
-  overflow: hidden; /* prevent body double-scroll */
+  overflow: hidden;
 }
 
 /* TOP BAR */
@@ -21,8 +21,8 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   height: 70px;
+  width: 100%;
   padding: 12px 20px;
   background: #111;
   border-bottom: 1px solid #2a2a2a;
@@ -33,7 +33,7 @@ html, body {
   z-index: 10;
 }
 
-/* LEFT LABEL */
+/* LABEL */
 .pipe-label {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.2rem;
@@ -53,31 +53,31 @@ html, body {
   cursor: pointer;
 }
 
-/* MAIN SCROLL CONTAINER */
+/* SCROLL AREA */
 .container {
   position: absolute;
   top: 70px;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  overflow-y: auto;   /* ✅ THIS IS THE KEY */
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-/* SECTIONS */
+/* SECTION FRAMES */
 .section {
   width: 100%;
   border: none;
   display: block;
 }
 
-/* PIPE + NIPS HEIGHTS */
+/* FIXED HEIGHTS */
 .pipe-frame {
-  height: 100vh;   /* full working area */
+  height: 700px;   /* enough for PIPE interaction */
 }
 
 .nips-frame {
-  height: 60vh;    /* smaller for now */
+  height: 400px;   /* visible immediately after PIPE */
 }
 </style>
 </head>
