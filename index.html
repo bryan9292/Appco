@@ -42,10 +42,14 @@ html, body {
 /* MAIN */
 .container {
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding-top: 70px;
+}
+
+/* IFRAME */
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 </style>
 </head>
@@ -53,25 +57,21 @@ html, body {
 <body>
 
 <div class="topbar">
-  <button class="checkout" id="checkoutBtn" onclick="openCart()">Checkout</button>
+  <button class="checkout" onclick="openCart()">Checkout</button>
 </div>
 
 <div class="container">
-  <!-- PIPE SECTION LOADED HERE -->
-  <div id="section"></div>
+  <!-- PIPE LOADS CLEANLY HERE -->
+  <iframe src="pipe.html"></iframe>
 </div>
 
-<!-- CART MODAL -->
-<div class="overlay" id="cartOverlay" onclick="closeCart()"></div>
-
 <script>
-/* GLOBAL CART (shared) */
+/* GLOBAL CART */
 window.cart = [];
 
-/* Called by pipe.html */
 window.addToCart = function(item) {
   window.cart.push(item);
-  document.getElementById("checkoutBtn").innerText =
+  document.querySelector(".checkout").innerText =
     `Checkout (${window.cart.length})`;
 };
 
@@ -84,15 +84,6 @@ function openCart() {
       : "Cart is empty"
   );
 }
-
-function closeCart(){}
-
-/* Load PIPE */
-fetch("pipe.html")
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById("section").innerHTML = html;
-  });
 </script>
 
 </body>
