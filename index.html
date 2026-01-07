@@ -64,20 +64,19 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* SECTION FRAMES */
+/* IFRAME SECTIONS */
 .section {
   width: 100%;
   border: none;
   display: block;
 }
 
-/* FIXED HEIGHTS */
 .pipe-frame {
-  height: 700px;   /* enough for PIPE interaction */
+  height: 700px;
 }
 
 .nips-frame {
-  height: 400px;   /* visible immediately after PIPE */
+  height: 400px;
 }
 </style>
 </head>
@@ -92,14 +91,14 @@ html, body {
 <div class="container">
   <!-- PIPE -->
   <iframe
-    class="section pipe-frame"
-    src="pipe.html">
+    id="pipeFrame"
+    class="section pipe-frame">
   </iframe>
 
   <!-- NIPS -->
   <iframe
-    class="section nips-frame"
-    src="nips.html">
+    id="nipsFrame"
+    class="section nips-frame">
   </iframe>
 </div>
 
@@ -122,6 +121,13 @@ function openCart() {
       : "Cart is empty"
   );
 }
+
+/* 🔁 AUTO CACHE BUSTING */
+(function loadFreshModules() {
+  const ts = Date.now();
+  document.getElementById("pipeFrame").src = `pipe.html?v=${ts}`;
+  document.getElementById("nipsFrame").src = `nips.html?v=${ts}`;
+})();
 </script>
 
 </body>
