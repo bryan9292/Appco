@@ -21,7 +21,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 12px 20px; /* more breathing room */
+      padding: 12px 20px;
       background: #111;
       border-bottom: 1px solid #2a2a2a;
       display: flex;
@@ -38,7 +38,7 @@
       border: 1px solid #3a3a3a;
       color: #f2f2f2;
       cursor: pointer;
-      margin-right: 8px; /* shift left slightly */
+      margin-right: 8px;
     }
 
     /* MAIN */
@@ -77,7 +77,7 @@
       cursor: pointer;
     }
 
-    /* MODAL */
+    /* OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -94,8 +94,10 @@
       border: 1px solid #2a2a2a;
       border-radius: 10px;
       padding: 24px;
-      width: 340px;
+      width: 360px;
       text-align: left;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
     .close-x {
@@ -116,67 +118,25 @@
 
     .modal h2 {
       margin: 0 0 16px;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       text-align: center;
     }
 
-    .label {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-bottom: 6px;
-    }
-
-    .options {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-
-    .options button {
-      flex: 1 1 45%;
-      font-size: 1rem;
+    .cart-item {
+      border-bottom: 1px solid #2a2a2a;
       padding: 10px 0;
-      border-radius: 6px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      color: #f2f2f2;
-      cursor: pointer;
+      font-size: 0.95rem;
     }
 
-    .options button.active {
-      background: #2a2a2a;
-      border-color: #555;
-    }
-
-    .modal input {
-      width: 100%;
-      font-size: 1.5rem;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #3a3a3a;
-      background: #0b0b0b;
-      color: #f2f2f2;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .close {
-      width: 100%;
-      font-size: 1rem;
-      padding: 10px;
-      border-radius: 6px;
-      background: #1e1e1e;
-      border: 1px solid #3a3a3a;
-      color: #f2f2f2;
-      cursor: pointer;
+    .cart-item:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
 <body>
 
   <div class="topbar">
-    <button class="checkout" id="checkoutBtn">Checkout</button>
+    <button class="checkout" id="checkoutBtn" onclick="openCart()">Checkout</button>
   </div>
 
   <div class="container">
@@ -184,147 +144,69 @@
       <div class="pipe" onclick="toggleSizes()">PIPE</div>
 
       <div class="sizes" id="sizes">
-        <div class="item" onclick="openModal('3/8')">3/8</div>
-        <div class="item" onclick="openModal('1/2')">1/2</div>
-        <div class="item" onclick="openModal('3/4')">3/4</div>
-        <div class="item" onclick="openModal('1')">1</div>
-        <div class="item" onclick="openModal('1-1/4')">1-1/4</div>
-        <div class="item" onclick="openModal('1-1/2')">1-1/2</div>
-        <div class="item" onclick="openModal('2')">2</div>
-        <div class="item" onclick="openModal('2-1/2')">2-1/2</div>
+        <div class="item" onclick="openItemModal('3/8')">3/8</div>
+        <div class="item" onclick="openItemModal('1/2')">1/2</div>
+        <div class="item" onclick="openItemModal('3/4')">3/4</div>
+        <div class="item" onclick="openItemModal('1')">1</div>
+        <div class="item" onclick="openItemModal('1-1/4')">1-1/4</div>
+        <div class="item" onclick="openItemModal('1-1/2')">1-1/2</div>
+        <div class="item" onclick="openItemModal('2')">2</div>
+        <div class="item" onclick="openItemModal('2-1/2')">2-1/2</div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div class="overlay" id="overlay" onclick="closeModal()">
+  <!-- CART OVERLAY -->
+  <div class="overlay" id="cartOverlay" onclick="closeCart()">
     <div class="modal" onclick="event.stopPropagation()">
-      <div class="close-x" onclick="closeModal()">✕</div>
-
-      <h2 id="selectedSize"></h2>
-
-      <div class="label">Material</div>
-      <div class="options">
-        <button onclick="selectMaterial(this, 'Black')">Black</button>
-        <button onclick="selectMaterial(this, 'Galv')">Galv</button>
-        <button onclick="selectMaterial(this, 'Brass')">Brass</button>
-      </div>
-
-      <div class="label">Schedule</div>
-      <div class="options">
-        <button id="sch40Btn" onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
-        <button id="schAltBtn" onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
-      </div>
-
-      <div class="label">Ends</div>
-      <div class="options">
-        <button onclick="selectEnds(this, 'T x T')">T × T</button>
-        <button onclick="selectEnds(this, 'T x G')">T × G</button>
-        <button onclick="selectEnds(this, 'G x G')">G × G</button>
-        <button onclick="selectEnds(this, 'Plain')">Plain</button>
-      </div>
-
-      <div class="label">How many?</div>
-      <input type="number" min="1" id="qtyInput" />
-
-      <button class="close" onclick="submitItem()">Done</button>
+      <div class="close-x" onclick="closeCart()">✕</div>
+      <h2>Checkout</h2>
+      <div id="cartList"></div>
     </div>
   </div>
 
   <script>
     let cart = [];
 
-    let selectedSize = '';
-    let selectedMaterial = '';
-    let selectedSchedule = '';
-    let selectedEnds = '';
-
     function toggleSizes() {
       const sizes = document.getElementById('sizes');
       sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    function resetModal() {
-      selectedMaterial = '';
-      selectedSchedule = '';
-      selectedEnds = '';
-      document.getElementById('qtyInput').value = '';
-      document.querySelectorAll('.options button').forEach(b => b.classList.remove('active'));
-
-      const alt = document.getElementById('schAltBtn');
-      alt.innerText = 'Sch. 10';
-      alt.onclick = () => selectSchedule(alt, 'Sch. 10');
-    }
-
-    function openModal(size) {
-      selectedSize = size;
-      resetModal();
-      document.getElementById('selectedSize').innerText = `Pipe ${size}`;
-      document.getElementById('overlay').style.display = 'flex';
-    }
-
-    function closeModal() {
-      resetModal();
-      document.getElementById('overlay').style.display = 'none';
-    }
-
-    function selectMaterial(button, material) {
-      selectedMaterial = material;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      button.classList.add('active');
-
-      const alt = document.getElementById('schAltBtn');
-      alt.classList.remove('active');
-
-      if (material === 'Brass') {
-        alt.innerText = 'Thin';
-        alt.onclick = () => selectSchedule(alt, 'Thin');
-      } else {
-        alt.innerText = 'Sch. 10';
-        alt.onclick = () => selectSchedule(alt, 'Sch. 10');
-      }
-
-      selectedSchedule = '';
-    }
-
-    function selectSchedule(button, schedule) {
-      if (button.classList.contains('active')) {
-        button.classList.remove('active');
-        selectedSchedule = '';
-        return;
-      }
-
-      selectedSchedule = schedule;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      button.classList.add('active');
-    }
-
-    function selectEnds(button, ends) {
-      if (button.classList.contains('active')) {
-        button.classList.remove('active');
-        selectedEnds = '';
-        return;
-      }
-
-      selectedEnds = ends;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      button.classList.add('active');
-    }
-
-    function submitItem() {
-      const qty = document.getElementById('qtyInput').value;
-      if (!selectedSize || !selectedMaterial || !selectedSchedule || !selectedEnds || !qty) return;
-
+    /* TEMP ADD FOR DEMO PURPOSE */
+    function openItemModal(size) {
       cart.push({
-        size: selectedSize,
-        material: selectedMaterial,
-        schedule: selectedSchedule,
-        ends: selectedEnds,
-        qty: Number(qty)
+        size,
+        material: 'Selected',
+        schedule: 'Selected',
+        ends: 'Selected',
+        qty: 1
       });
 
       document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
-      closeModal();
+    }
+
+    function openCart() {
+      const list = document.getElementById('cartList');
+      list.innerHTML = '';
+
+      if (cart.length === 0) {
+        list.innerHTML = '<div class="cart-item">Cart is empty</div>';
+      } else {
+        cart.forEach((item, i) => {
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerText =
+            `${i + 1}. ${item.size} | ${item.material} | ${item.schedule} | ${item.ends} | Qty: ${item.qty}`;
+          list.appendChild(div);
+        });
+      }
+
+      document.getElementById('cartOverlay').style.display = 'flex';
+    }
+
+    function closeCart() {
+      document.getElementById('cartOverlay').style.display = 'none';
     }
   </script>
 
