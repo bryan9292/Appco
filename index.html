@@ -113,7 +113,7 @@ html, body {
   margin: 12px 0 6px;
 }
 
-/* OPTIONS — UNIFIED BUTTON GRID */
+/* OPTIONS */
 .options {
   display: flex;
   gap: 8px;
@@ -121,7 +121,7 @@ html, body {
 
 .options button {
   flex: 1;
-  height: 44px;              /* SAME HEIGHT EVERYWHERE */
+  height: 44px;
   font-size: 1rem;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
@@ -276,13 +276,18 @@ function selectSchedule(btn,val){
   current.schedule = val;
 }
 
+/* 🔒 ENDS: SINGLE SELECT ONLY */
 function selectEnds(btn,val){
   if(btn.classList.contains('active')){
     btn.classList.remove('active');
     current.ends='';
     return;
   }
-  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll(
+    "#itemOverlay .label + .options + .options button"
+  );
+  btn.parentElement.parentElement.querySelectorAll(".options button")
+    .forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   current.ends = val;
 }
