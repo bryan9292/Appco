@@ -57,7 +57,7 @@
       cursor: pointer;
     }
 
-    .sizes {
+    .list {
       margin-top: 24px;
       display: none;
       flex-direction: column;
@@ -65,8 +65,8 @@
       gap: 12px;
     }
 
-    .sizes span {
-      width: 180px;
+    .item {
+      width: 200px;
       font-size: 1.5rem;
       padding: 14px 0;
       border-radius: 8px;
@@ -136,17 +136,25 @@
 
   <div class="container">
     <div>
-      <div class="pipe" onclick="toggleSizes()">PIPE</div>
+      <div class="pipe" onclick="togglePipe()">PIPE</div>
 
-      <div class="sizes" id="sizes">
-        <span onclick="openModal('3/8')">3/8</span>
-        <span onclick="openModal('1/2')">1/2</span>
-        <span onclick="openModal('3/4')">3/4</span>
-        <span onclick="openModal('1')">1</span>
-        <span onclick="openModal('1-1/4')">1-1/4</span>
-        <span onclick="openModal('1-1/2')">1-1/2</span>
-        <span onclick="openModal('2')">2</span>
-        <span onclick="openModal('2-1/2')">2-1/2</span>
+      <!-- MATERIALS -->
+      <div class="list" id="materials">
+        <div class="item" onclick="selectMaterial('Black')">Black</div>
+        <div class="item" onclick="selectMaterial('Galv')">Galv</div>
+        <div class="item" onclick="selectMaterial('Brass')">Brass</div>
+      </div>
+
+      <!-- SIZES -->
+      <div class="list" id="sizes">
+        <div class="item" onclick="openModal('3/8')">3/8</div>
+        <div class="item" onclick="openModal('1/2')">1/2</div>
+        <div class="item" onclick="openModal('3/4')">3/4</div>
+        <div class="item" onclick="openModal('1')">1</div>
+        <div class="item" onclick="openModal('1-1/4')">1-1/4</div>
+        <div class="item" onclick="openModal('1-1/2')">1-1/2</div>
+        <div class="item" onclick="openModal('2')">2</div>
+        <div class="item" onclick="openModal('2-1/2')">2-1/2</div>
       </div>
     </div>
   </div>
@@ -154,7 +162,7 @@
   <!-- MODAL -->
   <div class="overlay" id="overlay">
     <div class="modal">
-      <h2 id="selectedSize">Size</h2>
+      <h2 id="selectedLabel"></h2>
       <p>How many?</p>
       <input type="number" min="1" id="qtyInput" />
       <button class="close" onclick="submitItem()">Done</button>
@@ -163,14 +171,23 @@
 
   <script>
     let cartCount = 0;
+    let currentMaterial = '';
 
-    function toggleSizes() {
+    function togglePipe() {
+      const materials = document.getElementById('materials');
       const sizes = document.getElementById('sizes');
-      sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
+      materials.style.display = materials.style.display === 'flex' ? 'none' : 'flex';
+      sizes.style.display = 'none';
+    }
+
+    function selectMaterial(material) {
+      currentMaterial = material;
+      document.getElementById('sizes').style.display = 'flex';
     }
 
     function openModal(size) {
-      document.getElementById('selectedSize').innerText = size;
+      document.getElementById('selectedLabel').innerText =
+        `${currentMaterial} Pipe ${size}`;
       document.getElementById('qtyInput').value = '';
       document.getElementById('overlay').style.display = 'flex';
     }
@@ -180,10 +197,7 @@
       if (!qty || qty <= 0) return;
 
       cartCount += 1;
-
-      const btn = document.getElementById('checkoutBtn');
-      btn.innerText = `Checkout (${cartCount})`;
-
+      document.getElementById('checkoutBtn').innerText = `Checkout (${cartCount})`;
       document.getElementById('overlay').style.display = 'none';
     }
   </script>
