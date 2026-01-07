@@ -39,19 +39,15 @@
       cursor: pointer;
     }
 
-    .checkout:active {
-      background: #2a2a2a;
-    }
-
-    /* MAIN CONTENT */
+    /* MAIN */
     .container {
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding-top: 70px;
       text-align: center;
       user-select: none;
-      padding-top: 70px; /* space for topbar */
     }
 
     .pipe {
@@ -70,12 +66,65 @@
     }
 
     .sizes span {
-      width: 160px;
+      width: 180px;
       font-size: 1.5rem;
-      padding: 12px 0;
+      padding: 14px 0;
       border-radius: 8px;
       background: #161616;
       border: 1px solid #2a2a2a;
+      cursor: pointer;
+    }
+
+    /* MODAL */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .modal {
+      background: #121212;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 24px;
+      width: 260px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin: 0 0 12px;
+      font-size: 1.6rem;
+    }
+
+    .modal p {
+      margin: 0 0 16px;
+      opacity: 0.85;
+    }
+
+    .modal input {
+      width: 100%;
+      font-size: 1.5rem;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #3a3a3a;
+      background: #0b0b0b;
+      color: #f2f2f2;
+      text-align: center;
+    }
+
+    .close {
+      margin-top: 16px;
+      font-size: 1rem;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: #1e1e1e;
+      border: 1px solid #3a3a3a;
+      color: #f2f2f2;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -90,15 +139,25 @@
       <div class="pipe" onclick="toggleSizes()">PIPE</div>
 
       <div class="sizes" id="sizes">
-        <span>3/8</span>
-        <span>1/2</span>
-        <span>3/4</span>
-        <span>1</span>
-        <span>1-1/4</span>
-        <span>1-1/2</span>
-        <span>2</span>
-        <span>2-1/2</span>
+        <span onclick="openModal('3/8')">3/8</span>
+        <span onclick="openModal('1/2')">1/2</span>
+        <span onclick="openModal('3/4')">3/4</span>
+        <span onclick="openModal('1')">1</span>
+        <span onclick="openModal('1-1/4')">1-1/4</span>
+        <span onclick="openModal('1-1/2')">1-1/2</span>
+        <span onclick="openModal('2')">2</span>
+        <span onclick="openModal('2-1/2')">2-1/2</span>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2 id="selectedSize">Size</h2>
+      <p>How many?</p>
+      <input type="number" min="0" placeholder="0" />
+      <button class="close" onclick="closeModal()">Done</button>
     </div>
   </div>
 
@@ -106,6 +165,15 @@
     function toggleSizes() {
       const sizes = document.getElementById('sizes');
       sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function openModal(size) {
+      document.getElementById('selectedSize').innerText = size;
+      document.getElementById('overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('overlay').style.display = 'none';
     }
   </script>
 
