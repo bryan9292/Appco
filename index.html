@@ -190,8 +190,8 @@
 
       <div class="label">Schedule</div>
       <div class="options">
-        <button onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
-        <button onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
+        <button id="sch40Btn" onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
+        <button id="schAltBtn" onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
       </div>
 
       <div class="label">How many?</div>
@@ -218,13 +218,31 @@
       document.getElementById('qtyInput').value = '';
       document.querySelectorAll('.options button').forEach(b => b.classList.remove('active'));
       document.getElementById('overlay').style.display = 'flex';
+
+      // Reset alt schedule button
+      const alt = document.getElementById('schAltBtn');
+      alt.innerText = 'Sch. 10';
+      alt.onclick = () => selectSchedule(alt, 'Sch. 10');
     }
 
     function selectMaterial(button, material) {
       selectedMaterial = material;
-      button.parentElement.querySelectorAll('button')
-        .forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       button.classList.add('active');
+
+      // Change Sch.10 to Thin if Brass
+      const alt = document.getElementById('schAltBtn');
+      alt.classList.remove('active');
+
+      if (material === 'Brass') {
+        alt.innerText = 'Thin';
+        alt.onclick = () => selectSchedule(alt, 'Thin');
+      } else {
+        alt.innerText = 'Sch. 10';
+        alt.onclick = () => selectSchedule(alt, 'Sch. 10');
+      }
+
+      selectedSchedule = '';
     }
 
     function selectSchedule(button, schedule) {
@@ -235,8 +253,7 @@
       }
 
       selectedSchedule = schedule;
-      button.parentElement.querySelectorAll('button')
-        .forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
