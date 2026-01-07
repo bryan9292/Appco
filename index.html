@@ -131,7 +131,7 @@
 <body>
 
   <div class="topbar">
-    <button class="checkout">Checkout</button>
+    <button class="checkout" id="checkoutBtn">Checkout</button>
   </div>
 
   <div class="container">
@@ -156,12 +156,14 @@
     <div class="modal">
       <h2 id="selectedSize">Size</h2>
       <p>How many?</p>
-      <input type="number" min="0" placeholder="0" />
-      <button class="close" onclick="closeModal()">Done</button>
+      <input type="number" min="1" id="qtyInput" />
+      <button class="close" onclick="submitItem()">Done</button>
     </div>
   </div>
 
   <script>
+    let cartCount = 0;
+
     function toggleSizes() {
       const sizes = document.getElementById('sizes');
       sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
@@ -169,10 +171,19 @@
 
     function openModal(size) {
       document.getElementById('selectedSize').innerText = size;
+      document.getElementById('qtyInput').value = '';
       document.getElementById('overlay').style.display = 'flex';
     }
 
-    function closeModal() {
+    function submitItem() {
+      const qty = document.getElementById('qtyInput').value;
+      if (!qty || qty <= 0) return;
+
+      cartCount += 1;
+
+      const btn = document.getElementById('checkoutBtn');
+      btn.innerText = `Checkout (${cartCount})`;
+
       document.getElementById('overlay').style.display = 'none';
     }
   </script>
