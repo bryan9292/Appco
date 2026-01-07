@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Pipe</title>
+<title>Materials</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
@@ -46,126 +46,6 @@ html, body {
   align-items: center;
   justify-content: center;
   padding-top: 70px;
-  text-align: center;
-}
-
-.pipe {
-  font-size: clamp(3rem, 20vw, 10rem);
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-}
-
-/* ✅ CENTERED SIZES */
-.sizes {
-  margin-top: 24px;
-  display: none;
-  flex-direction: column;
-  align-items: center;     /* centers buttons */
-  justify-content: center;
-  gap: 12px;
-  width: 100%;             /* ensures centering relative to PIPE */
-}
-
-.item {
-  width: 200px;
-  padding: 14px 0;
-  font-size: 1.5rem;
-  background: #161616;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* OVERLAY + MODAL */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-}
-
-.modal {
-  position: relative;
-  width: 360px;
-  background: #121212;
-  border: 1px solid #2a2a2a;
-  border-radius: 10px;
-  padding: 24px;
-}
-
-.close-x {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 26px;
-  border-radius: 6px;
-  background: #1e1e1e;
-  border: 1px solid #3a3a3a;
-  cursor: pointer;
-}
-
-.label {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  margin: 12px 0 6px;
-}
-
-/* OPTIONS */
-.options {
-  display: flex;
-  gap: 8px;
-}
-
-.options button {
-  flex: 1;
-  height: 44px;
-  font-size: 1rem;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  color: #f2f2f2;
-  cursor: pointer;
-}
-
-.options button.active {
-  background: #2a2a2a;
-  border-color: #555;
-}
-
-input {
-  width: 100%;
-  margin-top: 8px;
-  padding: 10px;
-  font-size: 1.3rem;
-  background: #0b0b0b;
-  border: 1px solid #3a3a3a;
-  border-radius: 6px;
-  color: #f2f2f2;
-  text-align: center;
-}
-
-.action {
-  width: 100%;
-  height: 44px;
-  margin-top: 16px;
-  background: #1e1e1e;
-  border: 1px solid #3a3a3a;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* CART */
-.cart-item {
-  border-bottom: 1px solid #2a2a2a;
-  padding: 10px 0;
-  font-size: 0.95rem;
 }
 </style>
 </head>
@@ -177,140 +57,42 @@ input {
 </div>
 
 <div class="container">
-  <div>
-    <div class="pipe" onclick="toggleSizes()">PIPE</div>
-    <div class="sizes" id="sizes">
-      <div class="item" onclick="openItemModal('3/8')">3/8</div>
-      <div class="item" onclick="openItemModal('1/2')">1/2</div>
-      <div class="item" onclick="openItemModal('3/4')">3/4</div>
-      <div class="item" onclick="openItemModal('1')">1</div>
-      <div class="item" onclick="openItemModal('1-1/4')">1-1/4</div>
-      <div class="item" onclick="openItemModal('1-1/2')">1-1/2</div>
-      <div class="item" onclick="openItemModal('2')">2</div>
-      <div class="item" onclick="openItemModal('2-1/2')">2-1/2</div>
-    </div>
-  </div>
-</div>
-
-<!-- ITEM MODAL -->
-<div class="overlay" id="itemOverlay" onclick="closeItemModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="close-x" onclick="closeItemModal()">✕</div>
-    <h3 id="itemTitle"></h3>
-
-    <div class="label">Material</div>
-    <div class="options">
-      <button onclick="selectMaterial(this,'Black')">Black</button>
-      <button onclick="selectMaterial(this,'Galv')">Galv</button>
-      <button onclick="selectMaterial(this,'Brass')">Brass</button>
-    </div>
-
-    <div class="label">Schedule</div>
-    <div class="options">
-      <button id="sch40" onclick="selectSchedule(this,'Sch. 40')">Sch. 40</button>
-      <button id="schAlt" onclick="selectSchedule(this,'Sch. 10')">Sch. 10</button>
-    </div>
-
-    <div class="label">Ends</div>
-    <div class="options">
-      <button onclick="selectEnds(this,'T x T')">T × T</button>
-      <button onclick="selectEnds(this,'T x G')">T × G</button>
-    </div>
-    <div class="options">
-      <button onclick="selectEnds(this,'G x G')">G × G</button>
-      <button onclick="selectEnds(this,'Plain')">Plain</button>
-    </div>
-
-    <div class="label">How many?</div>
-    <input type="number" min="1" id="qtyInput" />
-
-    <button class="action" onclick="addToCart()">Done</button>
-  </div>
+  <!-- PIPE SECTION LOADED HERE -->
+  <div id="section"></div>
 </div>
 
 <!-- CART MODAL -->
-<div class="overlay" id="cartOverlay" onclick="closeCart()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="close-x" onclick="closeCart()">✕</div>
-    <h3>Checkout</h3>
-    <div id="cartList"></div>
-  </div>
-</div>
+<div class="overlay" id="cartOverlay" onclick="closeCart()"></div>
 
 <script>
-let cart = [];
-let current = {};
+/* GLOBAL CART (shared) */
+window.cart = [];
 
-function toggleSizes() {
-  const s = document.getElementById('sizes');
-  s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
+/* Called by pipe.html */
+window.addToCart = function(item) {
+  window.cart.push(item);
+  document.getElementById("checkoutBtn").innerText =
+    `Checkout (${window.cart.length})`;
+};
+
+function openCart() {
+  alert(
+    window.cart.length
+      ? window.cart.map(
+          (c,i)=>`${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}`
+        ).join("\n")
+      : "Cart is empty"
+  );
 }
 
-function openItemModal(size) {
-  current = { size, material:'', schedule:'', ends:'', qty:0 };
-  document.getElementById('itemTitle').innerText = `Pipe ${size}`;
-  document.getElementById('qtyInput').value = '';
-  document.querySelectorAll('.options button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('schAlt').innerText = 'Sch. 10';
-  document.getElementById('itemOverlay').style.display = 'flex';
-}
+function closeCart(){}
 
-function closeItemModal() {
-  document.getElementById('itemOverlay').style.display = 'none';
-}
-
-function selectMaterial(btn,val){
-  current.material = val;
-  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const alt = document.getElementById('schAlt');
-  alt.classList.remove('active');
-  alt.innerText = val==='Brass' ? 'Thin' : 'Sch. 10';
-  current.schedule = '';
-}
-
-function selectSchedule(btn,val){
-  if(btn.classList.contains('active')){
-    btn.classList.remove('active');
-    current.schedule='';
-    return;
-  }
-  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  current.schedule = val;
-}
-
-function selectEnds(btn,val){
-  if(btn.classList.contains('active')){
-    btn.classList.remove('active');
-    current.ends='';
-    return;
-  }
-  document.querySelectorAll('#itemOverlay .options:nth-of-type(3) button, #itemOverlay .options:nth-of-type(4) button')
-    .forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  current.ends = val;
-}
-
-function addToCart(){
-  current.qty = Number(document.getElementById('qtyInput').value);
-  if(!current.material || !current.schedule || !current.ends || !current.qty) return;
-  cart.push({...current});
-  document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
-  closeItemModal();
-}
-
-function openCart(){
-  const list = document.getElementById('cartList');
-  list.innerHTML = cart.length
-    ? cart.map((c,i)=>`<div class="cart-item">${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}</div>`).join('')
-    : '<div class="cart-item">Cart is empty</div>';
-  document.getElementById('cartOverlay').style.display='flex';
-}
-
-function closeCart(){
-  document.getElementById('cartOverlay').style.display='none';
-}
+/* Load PIPE */
+fetch("pipe.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("section").innerHTML = html;
+  });
 </script>
 
 </body>
