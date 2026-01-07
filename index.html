@@ -25,13 +25,13 @@ html, body {
   background: #111;
   border-bottom: 1px solid #2a2a2a;
   display: flex;
-  justify-content: space-between; /* left + right */
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   z-index: 10;
 }
 
-/* PIPE LABEL */
+/* LEFT LABEL */
 .pipe-label {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.2rem;
@@ -41,7 +41,7 @@ html, body {
   user-select: none;
 }
 
-/* CHECKOUT BUTTON */
+/* CHECKOUT */
 .checkout {
   padding: 10px 18px;
   border-radius: 8px;
@@ -53,17 +53,24 @@ html, body {
 
 /* MAIN */
 .container {
-  padding-top: 70px;   /* single offset */
-  height: 100%;
+  padding-top: 70px;
   box-sizing: border-box;
 }
 
-/* IFRAME */
-iframe {
+/* IFRAME STACK */
+.section {
   width: 100%;
-  height: calc(100vh - 70px); /* visible area below topbar */
   border: none;
   display: block;
+}
+
+/* PIPE taller, NIPS shorter for now */
+.pipe-frame {
+  height: 100vh;
+}
+
+.nips-frame {
+  height: 60vh;
 }
 </style>
 </head>
@@ -76,7 +83,17 @@ iframe {
 </div>
 
 <div class="container">
-  <iframe src="pipe.html"></iframe>
+  <!-- PIPE -->
+  <iframe
+    class="section pipe-frame"
+    src="pipe.html">
+  </iframe>
+
+  <!-- NIPS -->
+  <iframe
+    class="section nips-frame"
+    src="nips.html">
+  </iframe>
 </div>
 
 <script>
@@ -93,7 +110,7 @@ function openCart() {
   alert(
     window.cart.length
       ? window.cart.map(
-          (c,i)=>`${i+1}. ${c.size} | ${c.material} | ${c.schedule} | ${c.ends} | Qty ${c.qty}`
+          (c,i)=>`${i+1}. ${c.size || 'Nips'} | ${c.material || ''} | ${c.schedule || ''} | ${c.ends || ''} | Qty ${c.qty || ''}`
         ).join("\n")
       : "Cart is empty"
   );
