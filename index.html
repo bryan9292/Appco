@@ -177,9 +177,9 @@
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div class="overlay" id="overlay">
-    <div class="modal">
+  <!-- MODAL OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
       <h2 id="selectedSize"></h2>
 
       <div class="label">Material</div>
@@ -221,23 +221,34 @@
       sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    function openModal(size) {
+    function resetModal() {
       selectedMaterial = '';
       selectedSchedule = '';
       selectedEnds = '';
-      document.getElementById('selectedSize').innerText = `Pipe ${size}`;
       document.getElementById('qtyInput').value = '';
-      document.querySelectorAll('.options button').forEach(b => b.classList.remove('active'));
-      document.getElementById('overlay').style.display = 'flex';
+      document.querySelectorAll('.options button')
+        .forEach(b => b.classList.remove('active'));
 
       const alt = document.getElementById('schAltBtn');
       alt.innerText = 'Sch. 10';
       alt.onclick = () => selectSchedule(alt, 'Sch. 10');
     }
 
+    function openModal(size) {
+      resetModal();
+      document.getElementById('selectedSize').innerText = `Pipe ${size}`;
+      document.getElementById('overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      resetModal();
+      document.getElementById('overlay').style.display = 'none';
+    }
+
     function selectMaterial(button, material) {
       selectedMaterial = material;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
       button.classList.add('active');
 
       const alt = document.getElementById('schAltBtn');
@@ -262,7 +273,8 @@
       }
 
       selectedSchedule = schedule;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
@@ -274,7 +286,8 @@
       }
 
       selectedEnds = ends;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
@@ -284,7 +297,7 @@
 
       cartCount++;
       document.getElementById('checkoutBtn').innerText = `Checkout (${cartCount})`;
-      document.getElementById('overlay').style.display = 'none';
+      closeModal();
     }
   </script>
 
