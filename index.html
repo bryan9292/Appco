@@ -15,18 +15,61 @@
       align-items: center;
       justify-content: center;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f2f2f2;
+    }
+
+    .container {
+      text-align: center;
+      user-select: none;
     }
 
     .pipe {
-      color: #f2f2f2;
       font-size: clamp(3rem, 20vw, 10rem);
       font-weight: 800;
       letter-spacing: 0.08em;
-      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .sizes {
+      margin-top: 24px;
+      display: none;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .sizes span {
+      font-size: 1.5rem;
+      padding: 10px 16px;
+      border-radius: 8px;
+      background: #161616;
+      border: 1px solid #2a2a2a;
     }
   </style>
 </head>
 <body>
-  <div class="pipe">PIPE</div>
+
+  <div class="container">
+    <div class="pipe" onclick="toggleSizes()">PIPE</div>
+
+    <div class="sizes" id="sizes">
+      <span>3/8</span>
+      <span>1/2</span>
+      <span>3/4</span>
+      <span>1</span>
+      <span>1-1/4</span>
+      <span>1-1/2</span>
+      <span>2</span>
+      <span>2-1/2</span>
+    </div>
+  </div>
+
+  <script>
+    function toggleSizes() {
+      const sizes = document.getElementById('sizes');
+      sizes.style.display = sizes.style.display === 'flex' ? 'none' : 'flex';
+    }
+  </script>
+
 </body>
 </html>
