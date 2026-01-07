@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-/* ✅ REQUIRED FOR iOS SAFARI IN IFRAME */
 html, body {
   margin: 0;
   padding: 0;
@@ -47,7 +46,7 @@ html, body {
   text-align: center;
 }
 
-/* MODAL OVERLAY */
+/* MODAL */
 .pipe-overlay {
   position: fixed;
   inset: 0;
@@ -88,7 +87,6 @@ html, body {
   margin: 12px 0 6px;
 }
 
-/* OPTIONS */
 .pipe-options {
   display: flex;
   gap: 8px;
@@ -188,8 +186,6 @@ html, body {
 </div>
 
 <script>
-/* PIPE MODULE LOGIC */
-
 let pipeCurrent = {};
 
 function pipeToggle() {
@@ -243,8 +239,11 @@ function pipeSubmit() {
   pipeCurrent.qty = Number(document.getElementById('pipeQty').value);
   if (!pipeCurrent.material || !pipeCurrent.schedule || !pipeCurrent.ends || !pipeCurrent.qty) return;
 
+  /* ✅ ROBUST CART HANDOFF */
   if (window.parent && window.parent.addToCart) {
     window.parent.addToCart({ ...pipeCurrent });
+  } else if (window.addToCart) {
+    window.addToCart({ ...pipeCurrent });
   }
 
   pipeClose();
