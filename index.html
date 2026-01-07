@@ -9,20 +9,17 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
   background: #0b0b0b;
   font-family: system-ui, sans-serif;
   color: #f2f2f2;
-  overflow: hidden;
 }
 
 /* TOP BAR */
 .topbar {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  height: 70px;
   width: 100%;
+  height: 70px;
   padding: 12px 20px;
   background: #111;
   border-bottom: 1px solid #2a2a2a;
@@ -33,8 +30,8 @@ html, body {
   z-index: 10;
 }
 
-/* LABEL */
-.pipe-label {
+/* LEFT LABEL */
+.order-label {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
@@ -53,30 +50,30 @@ html, body {
   cursor: pointer;
 }
 
-/* SCROLL AREA */
+/* MAIN CONTENT */
 .container {
-  position: absolute;
-  top: 70px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  padding: 24px 0;
 }
 
-/* IFRAME SECTIONS */
-.section {
+/* IFRAMES */
+iframe {
   width: 100%;
   border: none;
   display: block;
 }
 
-.pipe-frame {
-  height: 700px;
+/* SECTION SPACING */
+.section {
+  margin-bottom: 48px;
 }
 
-.nips-frame {
-  height: 400px;
+/* OPTIONAL SUBTLE DIVIDER */
+.section-label {
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  opacity: 0.45;
+  margin: 12px 0;
 }
 </style>
 </head>
@@ -84,22 +81,23 @@ html, body {
 <body>
 
 <div class="topbar">
-  <div class="pipe-label">PIPE</div>
+  <div class="order-label">ORDER FORM</div>
   <button class="checkout" onclick="openCart()">Checkout</button>
 </div>
 
 <div class="container">
-  <!-- PIPE -->
-  <iframe
-    id="pipeFrame"
-    class="section pipe-frame">
-  </iframe>
+  <!-- PIPE SECTION -->
+  <div class="section">
+    <iframe src="pipe.html"></iframe>
+  </div>
 
-  <!-- NIPS -->
-  <iframe
-    id="nipsFrame"
-    class="section nips-frame">
-  </iframe>
+  <!-- NIPS LABEL (CENTERED UNDER PIPE) -->
+  <div class="section-label">NIPS</div>
+
+  <!-- NIPS SECTION -->
+  <div class="section">
+    <iframe src="nips.html"></iframe>
+  </div>
 </div>
 
 <script>
@@ -121,13 +119,6 @@ function openCart() {
       : "Cart is empty"
   );
 }
-
-/* 🔁 AUTO CACHE BUSTING */
-(function loadFreshModules() {
-  const ts = Date.now();
-  document.getElementById("pipeFrame").src = `pipe.html?v=${ts}`;
-  document.getElementById("nipsFrame").src = `nips.html?v=${ts}`;
-})();
 </script>
 
 </body>
