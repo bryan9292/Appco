@@ -46,6 +46,7 @@ html, body {
   align-items: center;
   justify-content: center;
   padding-top: 70px;
+  text-align: center;
 }
 
 .pipe {
@@ -55,12 +56,15 @@ html, body {
   cursor: pointer;
 }
 
+/* ✅ CENTERED SIZES */
 .sizes {
   margin-top: 24px;
   display: none;
   flex-direction: column;
-  align-items: center;
+  align-items: center;     /* centers buttons */
+  justify-content: center;
   gap: 12px;
+  width: 100%;             /* ensures centering relative to PIPE */
 }
 
 .item {
@@ -276,17 +280,13 @@ function selectSchedule(btn,val){
   current.schedule = val;
 }
 
-/* 🔒 ENDS: SINGLE SELECT ONLY */
 function selectEnds(btn,val){
   if(btn.classList.contains('active')){
     btn.classList.remove('active');
     current.ends='';
     return;
   }
-  document.querySelectorAll(
-    "#itemOverlay .label + .options + .options button"
-  );
-  btn.parentElement.parentElement.querySelectorAll(".options button")
+  document.querySelectorAll('#itemOverlay .options:nth-of-type(3) button, #itemOverlay .options:nth-of-type(4) button')
     .forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   current.ends = val;
