@@ -41,15 +41,15 @@ html, body {
 
 /* MAIN */
 .container {
-  height: calc(100vh - 70px); /* subtract topbar height */
-  padding-top: 70px;
+  padding-top: 70px;   /* single offset */
+  height: 100%;
   box-sizing: border-box;
 }
 
 /* IFRAME */
 iframe {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 70px); /* visible area below topbar */
   border: none;
   display: block;
 }
@@ -63,7 +63,6 @@ iframe {
 </div>
 
 <div class="container">
-  <!-- PIPE LOADS CLEANLY HERE -->
   <iframe src="pipe.html"></iframe>
 </div>
 
