@@ -222,13 +222,21 @@
 
     function selectMaterial(button, material) {
       selectedMaterial = material;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
     function selectSchedule(button, schedule) {
+      if (button.classList.contains('active')) {
+        button.classList.remove('active');
+        selectedSchedule = '';
+        return;
+      }
+
       selectedSchedule = schedule;
-      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.parentElement.querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
       button.classList.add('active');
     }
 
