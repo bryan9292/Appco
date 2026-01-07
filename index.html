@@ -11,16 +11,47 @@
       padding: 0;
       height: 100%;
       background: #0b0b0b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       color: #f2f2f2;
     }
 
+    /* TOP BAR */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 12px 16px;
+      background: #111;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex;
+      justify-content: flex-end;
+      z-index: 10;
+    }
+
+    .checkout {
+      font-size: 1.1rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: #1e1e1e;
+      border: 1px solid #3a3a3a;
+      color: #f2f2f2;
+      cursor: pointer;
+    }
+
+    .checkout:active {
+      background: #2a2a2a;
+    }
+
+    /* MAIN CONTENT */
     .container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       user-select: none;
+      padding-top: 70px; /* space for topbar */
     }
 
     .pipe {
@@ -50,18 +81,24 @@
 </head>
 <body>
 
-  <div class="container">
-    <div class="pipe" onclick="toggleSizes()">PIPE</div>
+  <div class="topbar">
+    <button class="checkout">Checkout</button>
+  </div>
 
-    <div class="sizes" id="sizes">
-      <span>3/8</span>
-      <span>1/2</span>
-      <span>3/4</span>
-      <span>1</span>
-      <span>1-1/4</span>
-      <span>1-1/2</span>
-      <span>2</span>
-      <span>2-1/2</span>
+  <div class="container">
+    <div>
+      <div class="pipe" onclick="toggleSizes()">PIPE</div>
+
+      <div class="sizes" id="sizes">
+        <span>3/8</span>
+        <span>1/2</span>
+        <span>3/4</span>
+        <span>1</span>
+        <span>1-1/4</span>
+        <span>1-1/2</span>
+        <span>2</span>
+        <span>2-1/2</span>
+      </div>
     </div>
   </div>
 
