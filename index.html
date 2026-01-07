@@ -21,12 +21,13 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 12px 16px;
+      padding: 12px 20px; /* more breathing room */
       background: #111;
       border-bottom: 1px solid #2a2a2a;
       display: flex;
       justify-content: flex-end;
       z-index: 10;
+      box-sizing: border-box;
     }
 
     .checkout {
@@ -37,6 +38,7 @@
       border: 1px solid #3a3a3a;
       color: #f2f2f2;
       cursor: pointer;
+      margin-right: 8px; /* shift left slightly */
     }
 
     /* MAIN */
@@ -96,7 +98,6 @@
       text-align: left;
     }
 
-    /* X BUTTON */
     .close-x {
       position: absolute;
       top: 10px;
@@ -195,7 +196,7 @@
     </div>
   </div>
 
-  <!-- MODAL OVERLAY -->
+  <!-- MODAL -->
   <div class="overlay" id="overlay" onclick="closeModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="close-x" onclick="closeModal()">✕</div>
@@ -231,7 +232,9 @@
   </div>
 
   <script>
-    let cartCount = 0;
+    let cart = [];
+
+    let selectedSize = '';
     let selectedMaterial = '';
     let selectedSchedule = '';
     let selectedEnds = '';
@@ -254,6 +257,7 @@
     }
 
     function openModal(size) {
+      selectedSize = size;
       resetModal();
       document.getElementById('selectedSize').innerText = `Pipe ${size}`;
       document.getElementById('overlay').style.display = 'flex';
@@ -309,10 +313,17 @@
 
     function submitItem() {
       const qty = document.getElementById('qtyInput').value;
-      if (!selectedMaterial || !selectedSchedule || !selectedEnds || !qty) return;
+      if (!selectedSize || !selectedMaterial || !selectedSchedule || !selectedEnds || !qty) return;
 
-      cartCount++;
-      document.getElementById('checkoutBtn').innerText = `Checkout (${cartCount})`;
+      cart.push({
+        size: selectedSize,
+        material: selectedMaterial,
+        schedule: selectedSchedule,
+        ends: selectedEnds,
+        qty: Number(qty)
+      });
+
+      document.getElementById('checkoutBtn').innerText = `Checkout (${cart.length})`;
       closeModal();
     }
   </script>
