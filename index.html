@@ -92,17 +92,13 @@
       border-radius: 10px;
       padding: 24px;
       width: 320px;
-      text-align: center;
+      text-align: left;
     }
 
     .modal h2 {
       margin: 0 0 16px;
       font-size: 1.6rem;
-    }
-
-    .section {
-      margin-bottom: 16px;
-      text-align: left;
+      text-align: center;
     }
 
     .label {
@@ -114,6 +110,7 @@
     .options {
       display: flex;
       gap: 8px;
+      margin-bottom: 12px;
     }
 
     .options button {
@@ -132,13 +129,6 @@
       border-color: #555;
     }
 
-    /* NESTED SCHEDULE */
-    .schedule {
-      margin-top: 10px;
-      margin-left: 14px;
-      display: none;
-    }
-
     .modal input {
       width: 100%;
       font-size: 1.5rem;
@@ -148,18 +138,18 @@
       background: #0b0b0b;
       color: #f2f2f2;
       text-align: center;
+      margin-bottom: 16px;
     }
 
     .close {
-      margin-top: 18px;
+      width: 100%;
       font-size: 1rem;
-      padding: 8px 14px;
+      padding: 10px;
       border-radius: 6px;
       background: #1e1e1e;
       border: 1px solid #3a3a3a;
       color: #f2f2f2;
       cursor: pointer;
-      width: 100%;
     }
   </style>
 </head>
@@ -191,30 +181,21 @@
     <div class="modal">
       <h2 id="selectedSize"></h2>
 
-      <!-- MATERIAL -->
-      <div class="section">
-        <div class="label">Material</div>
-        <div class="options">
-          <button onclick="selectMaterial(this, 'Black')">Black</button>
-          <button onclick="selectMaterial(this, 'Galv')">Galv</button>
-          <button onclick="selectMaterial(this, 'Brass')">Brass</button>
-        </div>
-
-        <!-- SCHEDULE (NESTED) -->
-        <div class="schedule" id="scheduleSection">
-          <div class="label">Schedule</div>
-          <div class="options">
-            <button onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
-            <button onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
-          </div>
-        </div>
+      <div class="label">Material</div>
+      <div class="options">
+        <button onclick="selectMaterial(this, 'Black')">Black</button>
+        <button onclick="selectMaterial(this, 'Galv')">Galv</button>
+        <button onclick="selectMaterial(this, 'Brass')">Brass</button>
       </div>
 
-      <!-- QTY -->
-      <div class="section">
-        <div class="label">How many?</div>
-        <input type="number" min="1" id="qtyInput" />
+      <div class="label">Schedule</div>
+      <div class="options">
+        <button onclick="selectSchedule(this, 'Sch. 40')">Sch. 40</button>
+        <button onclick="selectSchedule(this, 'Sch. 10')">Sch. 10</button>
       </div>
+
+      <div class="label">How many?</div>
+      <input type="number" min="1" id="qtyInput" />
 
       <button class="close" onclick="submitItem()">Done</button>
     </div>
@@ -235,8 +216,7 @@
       selectedSchedule = '';
       document.getElementById('selectedSize').innerText = `Pipe ${size}`;
       document.getElementById('qtyInput').value = '';
-      document.getElementById('scheduleSection').style.display = 'none';
-      document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.options button').forEach(b => b.classList.remove('active'));
       document.getElementById('overlay').style.display = 'flex';
     }
 
@@ -244,7 +224,6 @@
       selectedMaterial = material;
       button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       button.classList.add('active');
-      document.getElementById('scheduleSection').style.display = 'block';
     }
 
     function selectSchedule(button, schedule) {
